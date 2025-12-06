@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio - Pavanputra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117; --text:#e6e6e6; --muted:#9aa3b2; --card:#14171b; --accent:#00aaff;
+      --nav: rgba(20,20,20,0.85); --input:#161b22; --footer:#111418;
+    }
+    body.light{
+      --bg:#f6f8fb; --text:#111827; --muted:#4b5563; --card:#ffffff; --accent:#007bff;
+      --nav: rgba(255,255,255,0.9); --input:#fff; --footer:#e9eef8;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; font-family:Poppins,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    a{color:inherit; text-decoration:none}
+
+    /* NAV */
+    nav{
+      position:fixed; inset:0 0 auto 0; height:72px; display:flex; align-items:center; justify-content:space-between;
+      padding:12px 36px; gap:16px; background:var(--nav); backdrop-filter: blur(8px); box-shadow:0 6px 18px rgba(2,6,23,0.4); z-index:999;
+    }
+    .nav-left{display:flex; align-items:center; gap:14px}
+    nav img.profile{ width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); }
+    nav ul{ display:flex; gap:18px; list-style:none; margin:0; padding:0; align-items:center }
+    nav li a{ font-weight:600; font-size:15px; color:var(--text); padding:8px 10px; border-radius:8px; transition:transform .12s ease, background .12s ease, color .12s ease }
+    nav li a:hover{ color:var(--card); background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.08)); }
+    nav li a:active{ transform:translateY(2px) scale(.995) }
+
+    /* Toggle */
+    .controls{ display:flex; align-items:center; gap:10px }
+    #toggleBtn{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:8px 12px; border-radius:20px; cursor:pointer; font-weight:600; transition:transform .12s, background .12s }
+    #toggleBtn:hover{ transform:translateY(-3px) }
+    #toggleBtn:active{ transform:translateY(2px) scale(.99) }
+
+    /* Page layout: each section 100vh */
+    main{ scroll-snap-type:y mandatory; overflow-y:auto; height:100vh; scroll-behavior:smooth; }
+    section{ min-height:100vh; padding:110px 6vw 60px; scroll-snap-align:start; display:flex; flex-direction:column; gap:18px; }
+    h1,h2{ margin:0 }
+    h2{ color:var(--accent); font-size:34px }
+
+    /* HOME */
+    #home{ justify-content:center; align-items:flex-start; gap:18px }
+    .home-grid{ display:flex; gap:30px; align-items:center; width:100%; max-width:1100px }
+    .home-left{ flex:1; min-width:280px }
+    .home-right{ flex:1; display:flex; justify-content:center }
+    .intro{ font-size:20px; color:var(--muted); line-height:1.6; max-width:650px }
+    .platforms{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap }
+
+    .platform-btn{
+      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; background:var(--card); color:var(--text);
+      box-shadow:0 6px 18px rgba(2,6,23,0.35); border:1px solid rgba(255,255,255,0.02); transition:transform .15s, box-shadow .15s, filter .12s;
+    }
+    .platform-btn:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(2,6,23,0.55) }
+    .platform-btn:active{ transform:translateY(2px) scale(.995) }
+
+    .platform-icon{ width:22px; height:22px; display:inline-block; }
+
+    /* CARDS */
+    .about-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start }
+
+    /* FIXED EQUAL HEIGHT CARDS */
+    .about-grid .card{ height:220px; display:flex; align-items:center; justify-content:center; text-align:center; padding:18px; background:var(--card); border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.45); transition:transform .12s, box-shadow .12s, filter .12s }
+    .about-grid .card:hover{ transform:translateY(-8px); box-shadow:0 26px 60px rgba(2,6,23,0.6) }
+    .about-grid .card:active{ transform:translateY(2px) scale(.995) }
+
+    /* SKILLS & CERTS */
+    #skills .skills-grid{ display:grid; grid-template-columns:2fr 1fr; gap:20px; align-items:start }
+    .skills-list{ font-size:18px; line-height:1.9; color:var(--muted) }
+    .certs .cert-item{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px; background:rgba(255,255,255,0.02); border-radius:10px; margin-bottom:10px; transition:transform .12s }
+    .cert-item .cert-title{ font-weight:600 }
+    .cert-btn{ background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; transition:transform .12s, box-shadow .12s }
+    .cert-btn:hover{ transform:translateY(-4px) }
+    .cert-btn:active{ transform:translateY(2px) scale(.99) }
+
+    /* PROJECTS */
+    #projects p{ color:var(--muted) }
+
+    /* CONTACT - center alignment, equal boxes */
+    #contact{ display:flex; justify-content:center; align-items:center; }
+    .contact-wrap{ width:100%; max-width:980px; display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:stretch }
+    .contact-card{ flex:1 1 280px; min-width:260px; background:var(--card); padding:18px; border-radius:12px; display:flex; flex-direction:column; gap:12px; align-items:center; justify-content:center; transition:transform .12s }
+    .contact-card:hover{ transform:translateY(-6px) }
+    .contact-card:active{ transform:translateY(2px) scale(.995) }
+    .contact-card h3{ margin:0 }
+    .contact-card p{ color:var(--muted) }
+
+    /* Form style inside contact card */
+    form.contact-form{ display:flex; flex-direction:column; gap:10px; width:100% }
+    input,textarea{ width:100%; padding:10px; border-radius:8px; border:none; background:var(--input); color:var(--text) }
+    button.cta{ padding:10px 14px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; transition:transform .12s }
+    button.cta:active{ transform:translateY(2px) scale(.995) }
+
+    footer{ padding:18px; text-align:center; background:var(--footer); color:var(--muted) }
+
+    /* Responsive */
+    @media(max-width:980px){
+      .about-grid{ grid-template-columns:1fr; }
+      #skills .skills-grid{ grid-template-columns:1fr; }
+      .home-grid{ flex-direction:column-reverse; align-items:flex-start }
+      nav{ padding:12px 18px }
+      .about-grid .card{ height:220px } /* keep fixed height on mobile as requested */
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <img class="profile" src="1.png" alt="Pavanputra photo">
+      <div style="display:flex;flex-direction:column;line-height:1;">
+        <strong style="font-size:15px">Pavanputra Yarramsetty</strong>
+        <!-- <small style="color:var(--muted);font-size:12px">B.Tech • Aditya University</small> -->
+      </div>
+    </div>
+
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="controls">
+      <button id="toggleBtn" aria-pressed="false">☀️ Light</button>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- HOME -->
+    <section id="home" aria-label="Home section">
+      <div class="home-grid">
+        <div class="home-left">
+          <h2>Welcome!</h2>
+          <p class="intro">
+            Hi, I'm <strong>Pavanputra Yarramsetty</strong>, a B.Tech student at Aditya University, Surampalem.
+            I enjoy problem solving, competitive programming, and building projects that help me learn.
+          </p>
+
+          <div class="platforms" aria-label="profiles">
+            <!-- LeetCode -->
+            <a class="platform-btn" href="https://leetcode.com/u/pavanputray/" target="_blank" rel="noopener noreferrer" title="LeetCode">
+              <span class="platform-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 12c0 5.523 4.477 10 10 10s10-4.477 10-10S17.523 2 12 2 2 6.477 2 12z" fill="currentColor"/>
+                  <path d="M7 12.5l3.5-3 6 6-3.5 3-6-6z" fill="#fff"/>
+                </svg>
+              </span>
+              <span style="font-weight:700">LeetCode</span>
+            </a>
+
+            <!-- CodeChef -->
+            <a class="platform-btn" href="https://www.codechef.com/users/pavanputray" target="_blank" rel="noopener noreferrer" title="CodeChef">
+              <span class="platform-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="22" height="22" rx="4" fill="currentColor"/>
+                  <circle cx="11" cy="12" r="2" fill="#fff"/>
+                </svg>
+              </span>
+              <span style="font-weight:700">CodeChef</span>
+            </a>
+
+            <!-- GeeksforGeeks -->
+            <a class="platform-btn" href="https://www.geeksforgeeks.org/profile/pavanputra" target="_blank" rel="noopener noreferrer" title="GeeksforGeeks">
+              <span class="platform-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M8 12h8v2H8z" fill="#fff"/></svg>
+              </span>
+              <span style="font-weight:700">GeeksforGeeks</span>
+            </a>
+
+            <!-- HackerRank -->
+            <a class="platform-btn" href="https://www.hackerrank.com/profile/pavanputray" target="_blank" rel="noopener noreferrer" title="HackerRank">
+              <span class="platform-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22"><rect x="2" y="6" width="20" height="12" rx="3" fill="currentColor"/><path d="M8 10h8v4H8z" fill="#fff"/></svg>
+              </span>
+              <span style="font-weight:700">HackerRank</span>
+            </a>
+
+            <!-- GitHub -->
+            <a class="platform-btn" href="https://github.com/PavanputraYarramsetty" target="_blank" rel="noopener noreferrer" title="GitHub">
+              <span class="platform-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.9 3.16 9.06 7.55 10.53.55.1.75-.24.75-.53 0-.26-.01-1.13-.02-2.05-3.07.67-3.72-1.48-3.72-1.48-.5-1.28-1.22-1.62-1.22-1.62-.99-.68.08-.66.08-.66 1.09.08 1.67 1.12 1.67 1.12.97 1.67 2.55 1.19 3.17.91.1-.71.38-1.19.69-1.46-2.45-.28-5.02-1.23-5.02-5.47 0-1.21.43-2.2 1.13-2.98-.11-.28-.49-1.4.11-2.92 0 0 .92-.29 3.02 1.13a10.4 10.4 0 0 1 2.75-.37c.93.01 1.87.13 2.75.37 2.09-1.42 3.01-1.13 3.01-1.13.61 1.52.23 2.64.11 2.92.7.78 1.12 1.77 1.12 2.98 0 4.25-2.58 5.19-5.04 5.46.39.34.73 1.02.73 2.07 0 1.49-.01 2.69-.01 3.06 0 .29.19.64.76.53C20.09 20.8 23.25 16.64 23.25 11.75 23.25 5.48 18.27.5 12 .5z"/>
+                </svg>
+              </span>
+              <span style="font-weight:700">GitHub</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="home-right" aria-hidden="true">
+          <div style="width:320px; height:320px; border-radius:16px; overflow:hidden; box-shadow:0 20px 50px rgba(2,6,23,0.6); border:6px solid rgba(255,255,255,0.02)">
+            <img src="1.png" alt="Pavanputra" style="width:100%;height:100%;object-fit:cover;display:block">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-label="About section">
+      <h2>About Me</h2>
+      <div class="about-grid" role="list">
+        <div class="card" role="listitem" tabindex="0">
+          <div>
+            <h3>📘 Schooling</h3>
+            <p style="color:var(--muted); margin-top:8px">I completed my schooling at <strong>Narayana Olympiad School, Bhimavaram</strong>.</p>
+          </div>
+        </div>
+
+        <div class="card" role="listitem" tabindex="0">
+          <div>
+            <h3>🎓 Intermediate</h3>
+            <p style="color:var(--muted); margin-top:8px">I completed my intermediate at <strong>Sasi Junior College, Velivennu</strong>.</p>
+          </div>
+        </div>
+
+        <div class="card" role="listitem" tabindex="0">
+          <div>
+            <h3>📍 Hometown</h3>
+            <p style="color:var(--muted); margin-top:8px">I belong to <strong>Nandamurugaruvu, Veeravasaram Mandal, West Godavari District</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" aria-label="Skills section">
+      <h2>Skills & Certifications</h2>
+
+      <div class="skills-grid" style="width:100%; max-width:1100px; display:block">
+        <div class="card" style="margin-bottom:18px">
+          <h3>Skills</h3>
+          <p class="skills-list">
+            ✔ Coding Skill<br>
+            ✔ Good Communication<br>
+            ✔ Typing Skill – Avg 60 WPM
+          </p>
+        </div>
+
+        <div class="card certs" style="padding:18px">
+          <h3>My Certifications</h3>
+
+          <!-- Certification 1 -->
+          <div class="cert-item">
+            <div>
+              <div class="cert-title">Microsoft Office Specialist Excel 2019 Associate</div>
+              <div style="color:var(--muted); font-size:13px">Credential ready</div>
+            </div>
+            <div>
+              <button class="cert-btn" data-cert="https://drive.google.com/file/d/1kADsAzSdfQgRgL7L5TNIJZFLsCUlI3Y_/view?usp=drive_link">View Certificate</button>
+            </div>
+          </div>
+
+          <!-- Certification 2 -->
+          <div class="cert-item">
+            <div>
+              <div class="cert-title">Microsoft Certified Power Platform Fundamentals</div>
+              <div style="color:var(--muted); font-size:13px">Credential ready</div>
+            </div>
+            <div>
+              <button class="cert-btn" data-cert="https://drive.google.com/file/d/1ErkhWUbZOUHKczt3tfLKC10L7I3uS69m/view?usp=drive_link">View Certificate</button>
+            </div>
+          </div>
+
+          <small style="color:var(--muted);">Note: Click <em>View Certificate</em> to open the certificate.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" aria-label="Projects section">
+      <h2>Projects</h2>
+      <div class="card" style="max-width:900px">
+        <p style="color:var(--muted)">I have not participated in any projects yet. I will update them soon!</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact section">
+      <h2>Contact</h2>
+
+      <div class="contact-wrap">
+        <div class="contact-card">
+          <h3>Email</h3>
+          <p>pavanputray@gmail.com</p>
+          <a href="mailto:pavanputray@gmail.com" class="cta" style="text-decoration:none"><button class="cta">Send Email</button></a>
+        </div>
+
+        <div class="contact-card">
+          <h3>Phone</h3>
+          <p>+91 94910 08797</p>
+          <a href="tel:+919491008797" style="text-decoration:none"><button class="cta">Call</button></a>
+        </div>
+
+        <div class="contact-card">
+          <h3>Send a Message</h3>
+          <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent (demo)');">
+            <input type="text" placeholder="Your name" required>
+            <input type="email" placeholder="Your email" required>
+            <textarea placeholder="Your message" rows="4" required></textarea>
+            <button class="cta" type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 Pavanputra Yarramsetty • All Rights Reserved
+  </footer>
+
+  <script>
+    const body = document.body;
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    function applyTheme(theme){
+      if(theme === 'light'){
+        body.classList.add('light');
+        toggleBtn.textContent = '🌙 Dark';
+        toggleBtn.setAttribute('aria-pressed','true');
+      } else {
+        body.classList.remove('light');
+        toggleBtn.textContent = '☀️ Light';
+        toggleBtn.setAttribute('aria-pressed','false');
+      }
+    }
+
+    const saved = localStorage.getItem('theme') || 'dark';
+    applyTheme(saved);
+
+    toggleBtn.addEventListener('click', () => {
+      const current = body.classList.contains('light') ? 'light' : 'dark';
+      const next = current === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    });
+
+    document.querySelectorAll('.cert-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const link = btn.getAttribute('data-cert').trim();
+        if(link){
+          window.open(link, '_blank', 'noopener');
+        } else {
+          alert('Certificate link not provided yet.');
+        }
+      });
+    });
+
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click',(ev)=>{
+        ev.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+          el.setAttribute('tabindex','-1');
+          el.focus({preventScroll:true});
+          setTimeout(()=> el.removeAttribute('tabindex'),800);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
